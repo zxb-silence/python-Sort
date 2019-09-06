@@ -92,8 +92,52 @@ def quickSort(arr, left, right):
     return arr
 
 
+# 堆排序
+def heapify(arr, n, i):
+    largest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+    if left < n and arr[left] > arr[largest]:
+        largest = left
+    if right < n and arr[right] > arr[largest]:
+        largest = right
+    if largest != i:
+        arr[largest], arr[i] = arr[i], arr[largest]
+        heapify(arr, n, largest)
+
+def heapSort(arr):
+    # 构造最大堆
+    n = len(arr)
+    for i in range(n, -1, -1):
+        heapify(arr, n, i)
+
+    for i in range(n-1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]
+        heapify(arr, i, 0)
+    return arr
+
+
+# 计数排序
+def countSort(arr, maxvalue):
+    bucketLen = maxvalue + 1
+    bucket = [0] * bucketLen
+    n = len(arr)
+    for i in range(n):
+        if not bucket[arr[i]]:
+            bucket[arr[i]] = 0
+        bucket[arr[i]] += 1
+    sortIdx = 0
+    for j in range(bucketLen):
+        while bucket[j] > 0:
+            arr[sortIdx] = j
+            sortIdx += 1
+            bucket[j] -= 1
+    return arr
+
+
 if __name__ == '__main__':
     data = np.random.randint(2, 50, 20)
+    #data = [12, 11, 13, 5, 6, 7]
     print('原始数据：  ', data)
     print('bubleSort:  ', bubble(data))
     print('selectSort: ', select(data))
@@ -101,3 +145,5 @@ if __name__ == '__main__':
     print('shellSort:  ', shellSort(data))
     print('mergeSort:  ', np.array(mergeSort(data)))
     print('quickSort:  ', quickSort(data, 0, len(data)-1))
+    print('heapSort:   ', heapSort(data))
+    print('countSort:  ', countSort(data, 50))
